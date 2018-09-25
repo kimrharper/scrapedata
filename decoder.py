@@ -19,16 +19,25 @@ import sys
 #     print(encoded)
 
 # print(big5char)
+import codecs
 
 
 char = ['大','小']
+s = char[1].encode('hkscs').hex()
+print(s)
+
+print(bytes(s))
+print(s.decode('big5hkscs'))
+
+print(bytearray.fromhex(b'a4j'))
+
 id = ['43','49']
 era = ['甲骨文','金文','楚系文字']
 l=[]
-
-for i in range(len(char)):
-    for e in era:
-        l.append("http://char.iis.sinica.edu.tw/Search/YiChar_SQL.aspx?char={}&word={}&font={}".format(id[i],char[i],e))
-
-for i in l:
-    print(i)
+#
+# for i in range(len(char)):
+#     for e in era:
+#         l.append("http://char.iis.sinica.edu.tw/Search/YiChar_SQL.aspx?char={}&word={}&font={}".format(id[i],char[i],e))
+#
+# for i in l:
+#     print(i)

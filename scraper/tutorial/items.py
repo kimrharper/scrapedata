@@ -6,6 +6,7 @@
 # https://doc.scrapy.org/en/latest/topics/items.html
 
 import scrapy
+import os
 
 
 class TutorialItem(scrapy.Item):
@@ -18,9 +19,11 @@ class MyItem(scrapy.Item):
 
     # ... other item fields ...
     image_urls = scrapy.Field()
+    image_name = scrapy.Field()
     images = scrapy.Field()
 
 
 class ImageItem(scrapy.Item):
     file_urls = scrapy.Field()
     files = scrapy.Field()
+
