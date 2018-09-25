@@ -8,23 +8,25 @@ import time
 
 char = ['大','小']
 id = ['43','49']
-era = ['甲骨文','金文','楚系文字']
+era = ['甲骨文','標楷體']
 l=[]
 
-for i in range(len(char)):
-    for e in era:
-        l.append("http://char.iis.sinica.edu.tw/Search/YiChar_SQL.aspx?char={}&word={}&font={}".format(id[i],char[i],e))
-input(l)
+
 
 class ImageSpider(scrapy.Spider):
     name = "chinese"
 
     def start_requests(self):
-        urls = l
-        for url in urls:
-            yield scrapy.Request(url=url, callback=self.parse)
+
+        for i in range(len(char)):
+            for e in era:
+                url = ("http://char.iis.sinica.edu.tw/Search/YiChar_SQL.aspx?char={}&word={}&font={}".format(id[i],
+                                                                                                               char[i],
+                                                                                                               e))
+                yield scrapy.Request(url=url, callback=self.parse,meta={'index':1,'id':id[i],'char':char[i],'era':e})
 
     def parse(self, response):
+        print(response.meta['char'])
         for elem in response.xpath("//img"):
             img_url = elem.xpath("@src").extract_first()
             img_url = 'http://char.iis.sinica.edu.tw'+img_url
