@@ -1,0 +1,1 @@
+https://github.com/scrapy/scrapy/issues/3143
