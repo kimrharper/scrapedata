@@ -1,5 +1,5 @@
 import scrapy
-
+import pandas as pd
 
 class ChineseSpider(scrapy.Spider):
     name = "chinese"
@@ -12,6 +12,9 @@ class ChineseSpider(scrapy.Spider):
             yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response):
+        newfile = pd.DataFrame(columns=['id', 'char', 'link'])
+        newfile.loc[1] = ([1, 'chinese', 'www.google.com'])
+
         page = response.url.split("/")[-2]
         filename = 'chinese-%s.html' % page
         with open(filename, 'wb') as f:
