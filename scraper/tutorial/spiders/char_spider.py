@@ -2,17 +2,19 @@ from tutorial.items import MyItem
 import scrapy
 import time
 
-char = ['大','小','一','二','三','十','百','千','多','不']
-era,era_english = ['甲骨文','金文','楚系文字'],['oracle','jinwen','chuxi']
+char_line1 = ['大','小','一','二','三','十','百','千','多','不']
+char_line2 = ['人','夫','子','男','女','王','主','我','你','他']
+char_line3 = ['口','說','目','見','耳','聞','手','工','腳','行']
+era,era_english = ['甲骨文','金文','楚系文字','小篆'],['oracle','jinwen','chuxi','smallseal']
 
 class CharSpider(scrapy.Spider):
     name = "chars"
 
     def start_requests(self):
-        for c in char:
+        for c in char_line3:
+            time.sleep(1)
             big5= c.encode('hkscs').hex()
             url = 'http://char.iis.sinica.edu.tw/Search/char_SQL.aspx?char={}&type=0'.format(big5)
-            print(url)
             yield scrapy.Request(url=url,meta={'char':c,'big5':big5})
 
     def parse(self, response):
@@ -20,13 +22,14 @@ class CharSpider(scrapy.Spider):
         # img = response.xpath("//img[@name='charImg']/@src").extract_first()[2:]
 
         meta['id'] = idnum = response.xpath("//input[@type='hidden' and @name='char']/@value").extract()[0]
-        for u,e in enumerate(era):
+        for chinese_era, english_era in zip(era, era_english):
             time.sleep(2)
             url = ("http://char.iis.sinica.edu.tw/Search/YiChar_SQL.aspx?char={}&word={}&font={}".format(idnum,
                                                                                                          meta['char'],
-                                                                                                         era[u]))
-            meta['era'] = era[u]
-            meta['era_english'] = era_english[u]
+                                                                                                         chinese_era))
+            print(url)
+            meta['era'] = chinese_era
+            meta['era_english'] = english_era
             yield scrapy.Request(url=url,callback=self.parse_images,meta=meta)
 
     def parse_images(self, response):
