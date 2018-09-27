@@ -44,12 +44,16 @@
 
 # str1 = 'hello'
 # print(str1[2:])
+#
+# l = [[1, 2], [2, 3], [4, 5]]
+#
+# out = open('out.csv', 'w')
+# for row in l:
+#     for column in row:
+#         out.write('%d,' % column)
+#     out.write('\n')
+# out.close()
 
-l = [[1, 2], [2, 3], [4, 5]]
-
-out = open('out.csv', 'w')
-for row in l:
-    for column in row:
-        out.write('%d,' % column)
-    out.write('\n')
-out.close()
+for i in range(100):
+    s = '{:03}'.format(i)
+    print(s)
