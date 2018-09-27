@@ -2,16 +2,8 @@ from tutorial.items import MyItem
 import scrapy
 import time
 
-char = ['大','小']
+char = ['大','小','一','二','三','十','百','千','多','不']
 era,era_english = ['甲骨文','金文','楚系文字'],['oracle','jinwen','chuxi']
-
-def digit_space(val):
-    if val < 10:
-        return '00'+str(val)
-    elif (val > 9) and (val < 100):
-        return '0'+str(val)
-    else:
-        return str(val)
 
 class CharSpider(scrapy.Spider):
     name = "chars"
@@ -29,7 +21,7 @@ class CharSpider(scrapy.Spider):
 
         meta['id'] = idnum = response.xpath("//input[@type='hidden' and @name='char']/@value").extract()[0]
         for u,e in enumerate(era):
-            time.sleep(3)
+            time.sleep(2)
             url = ("http://char.iis.sinica.edu.tw/Search/YiChar_SQL.aspx?char={}&word={}&font={}".format(idnum,
                                                                                                          meta['char'],
                                                                                                          era[u]))
@@ -48,16 +40,13 @@ class CharSpider(scrapy.Spider):
         char_meta = []
 
         for elem in response.xpath("//img"):
-            nmeta = response.meta
-            time.sleep(3)
-            img_url = elem.xpath("@src").extract_first()
-            img_url = 'http://char.iis.sinica.edu.tw' + img_url
-            mname = 'acs/' + nmeta['big5'] + '/' + nmeta['big5'] + '-' + nmeta['era_english'] +'_'+ digit_space(i) + '.gif'
-            item['image_urls'] = img_url
-            item['image_name'] = mname
-            char_meta.append([nmeta['char'],nmeta['big5'],nmeta['id'],nmeta['era_english'],nmeta['era'],mname])
-
+            m = response.meta
+            img_url = 'http://char.iis.sinica.edu.tw' + elem.xpath("@src").extract_first()
+            img_name = 'acs/' + m['big5'] + '/' + m['big5'] + '-' + m['era_english'] +'_'+ '{:03}'.format(i) + '.gif'
+            item['image_urls'],item['image_name'] = img_url,img_name
+            char_meta.append([m['char'],m['big5'],m['id'],m['era_english'],m['era'],img_name])
             i += 1
+            time.sleep(2)
             yield item
 
         with open('chars_data.csv', 'a') as c_data:
