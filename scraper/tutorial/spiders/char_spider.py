@@ -12,7 +12,7 @@ class CharSpider(scrapy.Spider):
 
     def start_requests(self):
         for c in char_line3:
-            time.sleep(1)
+            time.sleep(2)
             big5= c.encode('hkscs').hex()
             url = 'http://char.iis.sinica.edu.tw/Search/char_SQL.aspx?char={}&type=0'.format(big5)
             yield scrapy.Request(url=url,meta={'char':c,'big5':big5})
