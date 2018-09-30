@@ -5,13 +5,20 @@ import time
 char_line1 = ['大','小','一','二','三','十','百','千','多','不']
 char_line2 = ['人','夫','子','男','女','王','主','我','你','他']
 char_line3 = ['口','說','目','見','耳','聞','手','工','腳','行']
+char_line4 = ['來','入','出','上','下','中','在','左','右','有']
+char_line5 = ['吃','飯','菜','豆','肉','牛','豬','雞','魚','茶']
+char_line6 = ['國','家','校','文','學','狗','貓','馬','鳥','虫']
+char_line7 = ['日','月','天','地','海','木','火','土','金','水']
+char_line8 = ['氣','幹','雨','山','川','米','田','花','石','玉']
+char_line9 = ['村','店','車','衣','白','黑','紅','藍','藍','黃']
+char_line10= ['是','心','好','愛','喜','幸','生','死','力','疾']
 era,era_english = ['甲骨文','金文','楚系文字','小篆'],['oracle','jinwen','chuxi','smallseal']
 
 class CharSpider(scrapy.Spider):
     name = "chars"
 
     def start_requests(self):
-        for c in char_line3:
+        for c in char_line10:
             time.sleep(2)
             big5= c.encode('hkscs').hex()
             url = 'http://char.iis.sinica.edu.tw/Search/char_SQL.aspx?char={}&type=0'.format(big5)
@@ -45,7 +52,7 @@ class CharSpider(scrapy.Spider):
         for elem in response.xpath("//img"):
             m = response.meta
             img_url = 'http://char.iis.sinica.edu.tw' + elem.xpath("@src").extract_first()
-            img_name = 'acs/' + m['big5'] + '/' + m['big5'] + '-' + m['era_english'] +'_'+ '{:03}'.format(i) + '.gif'
+            img_name = 'acs/' + m['big5'] + '/' + m['big5'] + '-' + m['era_english'] +'_'+ '{:03}'.format(i) + '.jpg'
             item['image_urls'],item['image_name'] = img_url,img_name
             char_meta.append([m['char'],m['big5'],m['id'],m['era_english'],m['era'],img_name])
             i += 1
