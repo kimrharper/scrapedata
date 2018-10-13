@@ -1,13 +1,15 @@
 import os
 from PIL import Image
 
+# numpy.invert(close_img)
+
 folder_list = []
-for filename in os.listdir("scraper/images/tcc/."):
+for filename in os.listdir("scraper/images/acs/."):
     if filename != '.DS_Store':
         folder_list.append(filename)
 
 for folder in folder_list:
-    path = "scraper/images/tcc/"
+    path = "scraper/images/acs/"
     fpath = folder+'/'
     for file in os.listdir(path+folder+'/.'):
         old_name = path+fpath+file
