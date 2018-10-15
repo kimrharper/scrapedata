@@ -1,19 +1,25 @@
 import os
 from PIL import Image
+from PIL.ImageOps import invert, grayscale
+import numpy as np
 
-# numpy.invert(close_img)
 
-folder_list = []
-for filename in os.listdir("scraper/images/acs/."):
-    if filename != '.DS_Store':
-        folder_list.append(filename)
+path = "scraper/images/practice/"
+fpath = '/'
+selector = '.'
 
-for folder in folder_list:
-    path = "scraper/images/acs/"
-    fpath = folder+'/'
-    for file in os.listdir(path+folder+'/.'):
-        old_name = path+fpath+file
-        print(old_name)
-        new_image = Image.open(old_name)
-        new_image.save(old_name[0:-3] + 'bmp', 'bmp')
-        os.remove(old_name)
+def convert_img(path, resize=False):
+    img = Image.open(path)
+    img = img.convert('L')
+    img = img.resize((79, 65))
+    img = invert(img)
+    img = img.convert('1')
+    img.save(path[0:-3] + 'png','png')
+    os.remove(path)
+
+for f in os.listdir(path + selector):
+    if f[-3:] in ['png','bmp']:
+        convert_img(path + f)
+    elif f[0] != '.':
+        folder = path + f + fpath
+        [convert_img(folder + file) for file in os.listdir(folder + selector)]
