@@ -1,2 +1,6 @@
 .idea/
 .idea/chinesescraper.iml
+Pipfile
+Pipfile.lock
+.ipynb_checkpoints/
+local_save/
